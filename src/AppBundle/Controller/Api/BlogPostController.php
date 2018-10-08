@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\FOSRestController;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -87,24 +88,20 @@ class BlogPostController extends FOSRestController
      * @Method("PUT")
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param int $id
+     * @param BlogPost $blogPost
      * @param Request $request
+     * @ParamConverter("blogPost", class="AppBundle:BlogPost")
      *
      * @return \FOS\RestBundle\View\View
      */
-    public function editPostAction(int $id, Request $request)
+    public function editPostAction(BlogPost $blogPost, Request $request)
     {
-        $blogPostEntity = $this->getDoctrine()->getRepository('AppBundle:BlogPost')->find($id);
-        if (!$blogPostEntity) {
-            throw new HttpException(404, "Blog post was not found.");
-        }
-
-        $blogPostForm = $this->createForm(BlogPostType::class, $blogPostEntity);
+        $blogPostForm = $this->createForm(BlogPostType::class, $blogPost);
 
         $blogPostForm->submit($request->request->all());
         if ($blogPostForm->isSubmitted() && $blogPostForm->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($blogPostEntity);
+            $entityManager->persist($blogPost);
             $entityManager->flush();
 
             return $this->view($blogPostForm->getData());
@@ -119,25 +116,21 @@ class BlogPostController extends FOSRestController
      *     description="Publish post to specified target"
      * )
      *
-     * @Route(name="api.blog_post.publish", path="/blog-post/{post}/{target}")
+     * @Route(name="api.blog_post.publish", path="/blog-post/{id}/{target}")
      * @Method("POST")
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param int $post
+     * @param BlogPost $blogPost
      * @param string $target
+     * @ParamConverter("blogPost", class="AppBundle:BlogPost")
      *
      * @return \FOS\RestBundle\View\View
      * @throws \AppBundle\Exception\TargetNotExistsException
      */
-    public function publishPostAction(int $post, string $target)
+    public function publishPostAction(BlogPost $blogPost, string $target)
     {
-        $blogPostEntity = $this->getDoctrine()->getRepository('AppBundle:BlogPost')->find($post);
-        if (!$blogPostEntity) {
-            throw new HttpException(404, "Blog post was not found.");
-        }
-
-        $socialMediaPublicher = $this->get('app.social_media_context');
-        $result = $socialMediaPublicher->handle($blogPostEntity, $target);
+        $socialMediaPublisher = $this->get('app.social_media_context');
+        $result = $socialMediaPublisher->handle($blogPost, $target);
 
         return $this->view($result);
     }
