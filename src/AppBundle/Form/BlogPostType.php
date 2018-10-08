@@ -11,6 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BlogPostType extends AbstractType
 {
+    const TAGS_SEPARATOR = '; ';
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -22,10 +24,10 @@ class BlogPostType extends AbstractType
         $builder->get('tags')
             ->addModelTransformer(new CallbackTransformer(
                     function ($tagsAsArray) {
-                        return implode(', ', $tagsAsArray);
+                        return implode(self::TAGS_SEPARATOR, $tagsAsArray);
                     },
                     function ($tagsAsString) {
-                        return explode(', ', $tagsAsString);
+                        return explode(self::TAGS_SEPARATOR, $tagsAsString);
                     }
                 )
             )
