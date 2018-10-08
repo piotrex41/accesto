@@ -25,6 +25,7 @@ class BlogPostController extends FOSRestController
      *
      * @Route(name="api.blog_post.list", path="/blog-post")
      * @Method("GET")
+     * @Security("has_role('ROLE_ADMIN') or has_role('ROLE_USER')")
      *
      * @return \FOS\RestBundle\View\View
      */
@@ -43,7 +44,7 @@ class BlogPostController extends FOSRestController
      *      {"name"="title", "dataType"="string", "required"=true, "description"="title of post"},
      *      {"name"="content", "dataType"="string", "required"=true, "description"="content"},
      *      {"name"="tags", "dataType"="string", "required"=true, "description"="tags separated by semicolon"},
-     *  }
+     *     }
      * )
      *
      * @Route(name="api.blog_post.create", path="/blog-post")
@@ -79,7 +80,7 @@ class BlogPostController extends FOSRestController
      *      {"name"="title", "dataType"="string", "required"=true, "description"="title of post"},
      *      {"name"="content", "dataType"="string", "required"=true, "description"="content"},
      *      {"name"="tags", "dataType"="string", "required"=true, "description"="tags separated by semicolon"},
-     *  }
+     *     }
      * )
      *
      * @Route(name="api.blog_post.edit", path="/blog-post/{id}")
@@ -117,8 +118,11 @@ class BlogPostController extends FOSRestController
      *     section="Blog Post",
      *     description="Publish post to specified target"
      * )
+     * 
      * @Route(name="api.blog_post.publish", path="/blog-post/{post}/{target}")
      * @Method("POST")
+     * @Security("has_role('ROLE_ADMIN')")
+     *
      * @param BlogPost $post
      * @param $target
      *
