@@ -33,3 +33,16 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+    app.social_media_context:
+        class: AppBundle\SocialMediaServices\SocialMediaPublisherContext
+        public: true
+
+    app.social_media_facebook:
+        class: AppBundle\SocialMediaServices\FacebookPublisher
+        public: false
+        tags: [ app.social_media ]
+
+    app.social_media_twitter:
+        class: AppBundle\SocialMediaServices\TwitterPublisher
+        public: false
+        tags: [ app.social_media ]

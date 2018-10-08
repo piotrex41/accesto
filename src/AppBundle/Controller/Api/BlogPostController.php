@@ -118,20 +118,26 @@ class BlogPostController extends FOSRestController
      *     section="Blog Post",
      *     description="Publish post to specified target"
      * )
-     * 
+     *
      * @Route(name="api.blog_post.publish", path="/blog-post/{post}/{target}")
      * @Method("POST")
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param BlogPost $post
-     * @param $target
+     * @param int $post
+     * @param string $target
      *
      * @return \FOS\RestBundle\View\View
      */
-    public function publishPostAction(BlogPost $post, $target)
+    public function publishPostAction(int $post, string $target)
     {
-        // todo: implement this
+        $blogPostEntity = $this->getDoctrine()->getRepository('AppBundle:BlogPost')->find($post);
+        if (!$blogPostEntity) {
+            throw new HttpException(404, "Blog post was not found.");
+        }
 
-        return $this->view();
+        $socialMediaPublicher = $this->get('app.social_media_context');
+        $result = $socialMediaPublicher->handle($blogPostEntity, $target);
+
+        return $this->view($result);
     }
 }
