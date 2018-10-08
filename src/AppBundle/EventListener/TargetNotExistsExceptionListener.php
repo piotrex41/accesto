@@ -16,7 +16,7 @@ class TargetNotExistsExceptionListener
         $exception = $event->getException();
 
         if (!$exception instanceof TargetNotExistsException) {
-            throw new $exception;
+            return;
         }
 
         $httpCode = 500;
