@@ -127,6 +127,7 @@ class BlogPostController extends FOSRestController
      * @param string $target
      *
      * @return \FOS\RestBundle\View\View
+     * @throws \AppBundle\Exception\TargetNotExistsException
      */
     public function publishPostAction(int $post, string $target)
     {

@@ -46,3 +46,8 @@ services:
         class: AppBundle\SocialMediaServices\TwitterPublisher
         public: false
         tags: [ app.social_media ]
+
+    published_message.listener:
+            class: AppBundle\EventListener\TargetNotExistsExceptionListener
+            tags:
+                - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
