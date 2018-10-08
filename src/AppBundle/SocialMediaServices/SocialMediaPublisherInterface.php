@@ -16,5 +16,5 @@ interface SocialMediaPublisherInterface
      * @param string $name
      * @return bool
      */
-    public function canProcess(string $name) : bool;
+    public function canPublish(string $name) : bool;
 }

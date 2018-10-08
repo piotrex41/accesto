@@ -28,9 +28,9 @@ class SocialMediaPublisherContext
      */
     public function handle(BlogPost $blogPost, string $target)
     {
-        foreach ($this->strategies as $publicher) {
-            if ($publicher->canProcess($target)) {
-                return $publicher->publish($blogPost);
+        foreach ($this->strategies as $publisher) {
+            if ($publisher->canProcess($target)) {
+                return $publisher->publish($blogPost);
             }
         }
 

@@ -23,7 +23,7 @@ class TwitterPublisher implements SocialMediaPublisherInterface
      * @param string $name
      * @return bool
      */
-    public function canProcess(string $name): bool
+    public function canPublish(string $name): bool
     {
         if (strtolower($name) === self::SM_NAME) {
             return true;
