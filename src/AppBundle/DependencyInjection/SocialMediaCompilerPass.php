@@ -8,6 +8,9 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class SocialMediaCompilerPass implements CompilerPassInterface
 {
+    /**
+     * @param ContainerBuilder $container
+     */
     public function process(ContainerBuilder $container)
     {
         $contextDefinition = $container->findDefinition('app.social_media_context');
