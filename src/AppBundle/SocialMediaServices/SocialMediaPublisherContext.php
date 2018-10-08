@@ -29,7 +29,7 @@ class SocialMediaPublisherContext
     public function handle(BlogPost $blogPost, string $target)
     {
         foreach ($this->strategies as $publisher) {
-            if ($publisher->canProcess($target)) {
+            if ($publisher->canPublish($target)) {
                 return $publisher->publish($blogPost);
             }
         }
